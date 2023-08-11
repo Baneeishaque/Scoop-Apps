@@ -13,11 +13,33 @@
             "hash": "e83f6b516ea45f87a957181a9c6aacfe83dc4723015e9a344aa438dbb6fd00d4"
         }
     },
-    "pre_install": [
+    "post_install": [
         "ensure \"$dir\\bin\" | Out-Null",
-        "Move-Item \"$dir\\jabba.exe\" \"$dir\\bin\\jabba.exe\""
+        "Move-Item \"$dir\\jabba.exe\" \"$dir\\bin\\jabba.exe\"",
+        "@\"",
+        "function jabba",
+        "{",
+        "`$fd3=`$([System.IO.Path]::GetTempFileName())",
+        "`$command=\"& '$dir\\bin\\jabba.exe' `$args --fd3 ```\"`$fd3```\"\"",
+        "& { `$env:JABBA_SHELL_INTEGRATION=\"ON\"; Invoke-Expression `$command }",
+        "`$fd3content=`$(Get-Content `$fd3)",
+        "if (`$fd3content) {",
+        "`$expression=`$fd3content.replace(\"export \",\"```$env:\").replace(\"unset \",\"Remove-Item env:\") -join \"``n\"",
+        "if (-not `$expression -eq \"\") { Invoke-Expression `$expression }",
+        "}",
+        "Remove-Item -Force `$fd3",
+        "}",
+        "\"@ | Out-File $dir/jabba.ps1",
+        "$sourceJabba=\"if (Test-Path `\"$dir\\jabba.ps1`\") { . `\"$dir\\jabba.ps1`\" }\"",
+        "if (-not $(Test-Path $HOME\\Documents\\PowerShell\\Profile.ps1))",
+        "{",
+        "New-Item -Path $HOME\\Documents\\PowerShell\\Profile.ps1 -Type File -Force | Out-Null",
+        "}",
+        "if (\"$(Get-Content $HOME\\Documents\\PowerShell\\Profile.ps1 | Select-String \"jabba.ps1\")\" -eq \"\")",
+        "{",
+        "\"`n$sourceJabba`n\" | Out-File -Append -Encoding ASCII $HOME\\Documents\\PowerShell\\Profile.ps1",
+        "}"
     ],
-    "bin": "bin\\jabba.exe",
     "env_set": {
         "JABBA_HOME": "$dir"
     },
