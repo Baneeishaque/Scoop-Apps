@@ -4,13 +4,11 @@
     "homepage": "https://github.com/Jabba-Team/jabba",
     "license": "Apache-2.0",
     "url": "https://github.com/Jabba-Team/jabba/raw/main/install.ps1",
-    "pre_install": [
+    "post_install": [
         "$env:JABBA_HOME = $dir",
-        "$env:JABBA_VERSION = $version"
+        "$env:JABBA_VERSION = $version",
+        "& $dir/install.ps1"
     ],
-    "installer": {
-
-    },
     "env_set": {
         "JABBA_HOME": "$dir"
     },
