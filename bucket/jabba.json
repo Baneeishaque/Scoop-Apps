@@ -1,5 +1,5 @@
 {
-    "version": "0.13.0",
+    "version": "0.14.0",
     "description": "Java Version Manager",
     "homepage": "https://github.com/Jabba-Team/jabba",
     "license": "Apache-2.0",
@@ -18,7 +18,7 @@
         "'jabba \"$args\"' | Out-File -FilePath \"$dir/jabba_executable.ps1\" -Append"
     ],
     "installer": {
-
+        
     },
     "bin": [
         [
@@ -32,6 +32,6 @@
     "persist": "jdk",
     "checkver": "github",
     "autoupdate": {
-
+        
     }
 }
