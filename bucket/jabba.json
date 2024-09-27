@@ -13,16 +13,17 @@
         "$content = $content -replace [regex]::Escape('\"`n$sourceJabba`n\" | Out-File -Append -Encoding ASCII $profile'), '# \"`n$sourceJabba`n\" | Out-File -Append -Encoding ASCII $profile'",
         "$content = $content -replace [regex]::Escape('Write-Host \"Skipped update of $profile (source string already present)\"'), 'Write-Host \"Please remove jabba from Powershell profile\"'",
         "$content = $content -replace [regex]::Escape('. $jabbaHome\\jabba.ps1'), '# . $jabbaHome\\jabba.ps1'",
-        "Set-Content $file -Value $content",
-        "\"if (Test-Path $dir\\jabba.ps1) { . $dir\\jabba.ps1 }\" | Out-File -FilePath \"$dir/jabba_executable.ps1\"",
-        "'jabba \"$args\"' | Out-File -FilePath \"$dir/jabba_executable.ps1\" -Append"
+        "Set-Content $file -Value $content"
     ],
     "installer": {
-        
+        "file": "install.ps1"
     },
+    "post_install": [
+        "'jabba \"$args\"' | Out-File -FilePath $dir/jabba.ps1 -Append"
+    ],
     "bin": [
         [
-            "jabba_executable.ps1",
+            "jabba.ps1",
             "jabba"
         ]
     ],
