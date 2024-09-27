@@ -1,0 +1,37 @@
+{
+    "version": "0.14.0",
+    "description": "Java Version Manager",
+    "homepage": "https://github.com/Jabba-Team/jabba",
+    "license": "Apache-2.0",
+    "url": "https://github.com/Jabba-Team/jabba/raw/main/install.ps1",
+    "pre_install": [
+        "$env:JABBA_HOME = $dir",
+        "$env:JABBA_VERSION = $version",
+        "$file = \"$dir/install.ps1\"",
+        "$content = Get-Content $file -Raw",
+        "$content = $content -replace [regex]::Escape('Write-Host \"Adding source string to $profile\"'), '#  Write-Host \"Adding source string to $profile\"'",
+        "$content = $content -replace [regex]::Escape('\"`n$sourceJabba`n\" | Out-File -Append -Encoding ASCII $profile'), '# \"`n$sourceJabba`n\" | Out-File -Append -Encoding ASCII $profile'",
+        "$content = $content -replace [regex]::Escape('Write-Host \"Skipped update of $profile (source string already present)\"'), 'Write-Host \"Please remove jabba from Powershell profile\"'",
+        "$content = $content -replace [regex]::Escape('. $jabbaHome\\jabba.ps1'), '# . $jabbaHome\\jabba.ps1'",
+        "Set-Content $file -Value $content",
+        "\"if (Test-Path $dir\\jabba.ps1) { . $dir\\jabba.ps1 }\" | Out-File -FilePath \"$dir/jabba_executable.ps1\"",
+        "'jabba \"$args\"' | Out-File -FilePath \"$dir/jabba_executable.ps1\" -Append"
+    ],
+    "installer": {
+        
+    },
+    "bin": [
+        [
+            "jabba_executable.ps1",
+            "jabba"
+        ]
+    ],
+    "env_set": {
+        "JABBA_HOME": "$dir"
+    },
+    "persist": "jdk",
+    "checkver": "github",
+    "autoupdate": {
+        
+    }
+}
