@@ -7,7 +7,7 @@
     "pre_install": [
         "$env:JABBA_HOME = $dir",
         "$env:JABBA_VERSION = $version",
-        "$file = \"$dir/install.ps1\"",
+        "$file = \"$dir\\install.ps1\"",
         "$content = Get-Content $file -Raw",
         "$content = $content -replace [regex]::Escape('Write-Host \"Adding source string to $profile\"'), '#  Write-Host \"Adding source string to $profile\"'",
         "$content = $content -replace [regex]::Escape('\"`n$sourceJabba`n\" | Out-File -Append -Encoding ASCII $profile'), '# \"`n$sourceJabba`n\" | Out-File -Append -Encoding ASCII $profile'",
