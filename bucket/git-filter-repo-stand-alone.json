@@ -9,109 +9,25 @@
     "architecture": {
         "64bit": {
             "url": [
-                "https://github.com/newren/git-filter-repo/archive/v2.47.0.zip#/git-filter-repo.zip",
-                "https://www.python.org/ftp/python/3.13.4/python-3.13.4-embed-amd64.zip#/python-embed.zip"
+                "https://github.com/newren/git-filter-repo/archive/v2.47.0.zip#/git-filter-repo.zip_",
+                "https://www.python.org/ftp/python/3.13.4/python-3.13.4-embed-amd64.zip#/python-embed.zip_"
             ],
             "hash": [
                 "8f3d099bf91ceac6cae60d79aac701e9bc08fd0eed67c601cc5dd401d5788871",
-                "b25f1481f3b64ba5d7e973e7c6d4f7f0b8a6156a6a4f672dc307f6d5c7f4b4cc"
-            ],
-            "extract_dir": [
-                "git-filter-repo-2.47.0",
-                "."
-            ]
-        },
-        "32bit": {
-            "url": [
-                "https://github.com/newren/git-filter-repo/archive/v2.47.0.zip#/git-filter-repo.zip",
-                "https://www.python.org/ftp/python/3.13.4/python-3.13.4-embed-win32.zip#/python-embed.zip"
-            ],
-            "hash": [
-                "8f3d099bf91ceac6cae60d79aac701e9bc08fd0eed67c601cc5dd401d5788871",
-                "e40e69e9f4a86c9c1b8b7e4a2b7e9f0a8a1c6b0f1e2b3c9a7d8f2e0a9b5c8d6a"
-            ],
-            "extract_dir": [
-                "git-filter-repo-2.47.0",
-                "."
-            ]
-        },
-        "arm64": {
-            "url": [
-                "https://github.com/newren/git-filter-repo/archive/v2.47.0.zip#/git-filter-repo.zip",
-                "https://www.python.org/ftp/python/3.13.4/python-3.13.4-embed-arm64.zip#/python-embed.zip"
-            ],
-            "hash": [
-                "8f3d099bf91ceac6cae60d79aac701e9bc08fd0eed67c601cc5dd401d5788871",
-                "d2b8c9f7e8a7c6b4f1e2a9c0b1d8e7f3c5a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5"
-            ],
-            "extract_dir": [
-                "git-filter-repo-2.47.0",
-                "."
+                "md5:7820da5998bf7d5d25530d871a1e0e28"
             ]
         }
     },
     "installer": {
         "script": [
-            "# Move git-filter-repo files",
+            "Rename-Item -Path \"$dir\\git-filter-repo.zip_\" -NewName git-filter-repo.zip",
+            "Rename-Item -Path \"$dir\\python-embed.zip_\" -NewName python-embed.zip",
+            "Expand-ZipArchive -Path \"$dir\\git-filter-repo.zip\" -DestinationPath \"$dir\" -Removal",
             "Get-ChildItem \"$dir\\git-filter-repo-*\\*\" | Move-Item -Destination \"$dir\"",
             "Remove-Item \"$dir\\git-filter-repo-*\" -Recurse -Force",
-            "# Extract python-embed.zip to python directory",
             "Expand-ZipArchive \"$dir\\python-embed.zip\" \"$dir\\python\" -Removal",
-            "# Create a wrapper",
             "Set-Content \"$dir\\git-filter-repo.cmd\" '@echo off\r\n\"%~dp0\\python\\python.exe\" \"%~dp0\\git-filter-repo\" %*'"
         ]
     },
-    "bin": "git-filter-repo.cmd",
-    "checkver": {
-        "script": [
-            "$gitver = (Invoke-RestMethod 'https://api.github.com/repos/newren/git-filter-repo/releases/latest').tag_name.TrimStart('v')",
-            "$pyver = (Invoke-WebRequest 'https://www.python.org/downloads/windows/').Content -match 'Latest Python 3 Release - Python ([\\d.]+)' | Out-Null; $matches[1]",
-            "Write-Output \"$gitver`_$pyver\""
-        ]
-    },
-    "autoupdate": {
-        "architecture": {
-            "64bit": {
-                "url": [
-                    "https://github.com/newren/git-filter-repo/archive/v$matchGitver.zip#/git-filter-repo.zip",
-                    "https://www.python.org/ftp/python/$matchPyver/python-$matchPyver-embed-amd64.zip#/python-embed.zip"
-                ],
-                "extract_dir": [
-                    "git-filter-repo-$matchGitver",
-                    "."
-                ]
-            },
-            "32bit": {
-                "url": [
-                    "https://github.com/newren/git-filter-repo/archive/v$matchGitver.zip#/git-filter-repo.zip",
-                    "https://www.python.org/ftp/python/$matchPyver/python-$matchPyver-embed-win32.zip#/python-embed.zip"
-                ],
-                "extract_dir": [
-                    "git-filter-repo-$matchGitver",
-                    "."
-                ]
-            },
-            "arm64": {
-                "url": [
-                    "https://github.com/newren/git-filter-repo/archive/v$matchGitver.zip#/git-filter-repo.zip",
-                    "https://www.python.org/ftp/python/$matchPyver/python-$matchPyver-embed-arm64.zip#/python-embed.zip"
-                ],
-                "extract_dir": [
-                    "git-filter-repo-$matchGitver",
-                    "."
-                ]
-            }
-        },
-        "hash": {
-            "url": [
-                "skip",
-                "https://www.python.org/downloads/release/python-$matchPyver/"
-            ],
-            "regex": [
-                "skip",
-                "(?sm)$basename.*?$md5"
-            ]
-        },
-        "version": "$matchGitver_$matchPyver"
-    }
+    "bin": "git-filter-repo.cmd"
 }
