@@ -1,0 +1,33 @@
+{
+    "version": "2.47.0_3.13.4",
+    "description": "git filter-branch replacement (using isolated embedded Python)",
+    "homepage": "https://github.com/newren/git-filter-repo",
+    "license": "MIT",
+    "suggest": {
+        "Git": "git"
+    },
+    "architecture": {
+        "64bit": {
+            "url": [
+                "https://github.com/newren/git-filter-repo/archive/v2.47.0.zip#/git-filter-repo.zip_",
+                "https://www.python.org/ftp/python/3.13.4/python-3.13.4-embed-amd64.zip#/python-embed.zip_"
+            ],
+            "hash": [
+                "8f3d099bf91ceac6cae60d79aac701e9bc08fd0eed67c601cc5dd401d5788871",
+                "md5:7820da5998bf7d5d25530d871a1e0e28"
+            ]
+        }
+    },
+    "installer": {
+        "script": [
+            "Rename-Item -Path \"$dir\\git-filter-repo.zip_\" -NewName git-filter-repo.zip",
+            "Rename-Item -Path \"$dir\\python-embed.zip_\" -NewName python-embed.zip",
+            "Expand-ZipArchive -Path \"$dir\\git-filter-repo.zip\" -DestinationPath \"$dir\" -Removal",
+            "Get-ChildItem \"$dir\\git-filter-repo-*\\*\" | Move-Item -Destination \"$dir\"",
+            "Remove-Item \"$dir\\git-filter-repo-*\" -Recurse -Force",
+            "Expand-ZipArchive \"$dir\\python-embed.zip\" \"$dir\\python\" -Removal",
+            "Set-Content \"$dir\\git-filter-repo.cmd\" '@echo off\r\n\"%~dp0\\python\\python.exe\" \"%~dp0\\git-filter-repo\" %*'"
+        ]
+    },
+    "bin": "git-filter-repo.cmd"
+}
